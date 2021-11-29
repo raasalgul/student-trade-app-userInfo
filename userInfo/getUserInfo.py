@@ -3,11 +3,11 @@ import logging
 from userInfo import app
 from flask import request
 from botocore.exceptions import ClientError
+import os
 from dotenv import load_dotenv
 
 ''' Loading Environment files '''
 load_dotenv()
-import os
 
 ''' Configuring AWS dynamo db '''
 dynamoDbResource = boto3.resource(os.getenv("AWS_DYNAMO"), region_name=os.getenv("AWS_REGION"))
@@ -15,8 +15,9 @@ dynamoDbResource = boto3.resource(os.getenv("AWS_DYNAMO"), region_name=os.getenv
 cognitoClient = boto3.client(os.getenv("AWS_COGNITO"), region_name=os.getenv("AWS_REGION"))
 table_name = os.getenv("DYNAMO_USER_TABLE")
 
-
 ''' getUser() This method get the necessary user information from the user dynamo table. '''
+
+
 @app.route('/get-user', methods=['POST'])
 def getUser():
     response = None
@@ -30,7 +31,7 @@ def getUser():
                }
         ''' Get the entire items from the table '''
         response = table.get_item(Key=key)
-        logging.log("getUser: Got response from table")
+        logging.log("getUser: Got response from table {}".format(response))
     except ClientError as e:
         logging.error(e)
     return response

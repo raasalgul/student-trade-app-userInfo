@@ -3,11 +3,11 @@ import logging
 from userInfo import app
 from flask import request
 from botocore.exceptions import ClientError
+import os
 from dotenv import load_dotenv
 
 ''' Loading Environment files '''
 load_dotenv()
-import os
 
 ''' Configuring AWS dynamo db '''
 dynamoDbResource = boto3.resource(os.getenv("AWS_DYNAMO"), region_name=os.getenv("AWS_REGION"))
@@ -62,13 +62,13 @@ def updateUser():
                     updateString = updateString[:-1]
                     logging.log('update String is {}'.format(updateString))
                     ''' Update the user info table '''
-                    table.update_item(
+                    response=table.update_item(
                         Key=key,
                         UpdateExpression=updateString,
                         ExpressionAttributeValues=expressionAttribute,
                         ReturnValues="UPDATED_NEW"
                     )
-                    logging.log("Value updated in the table")
+                    logging.log("Value updated in the table {}".format(response))
                 except ClientError as e:
                     logging.error(e)
         except ClientError as e:
