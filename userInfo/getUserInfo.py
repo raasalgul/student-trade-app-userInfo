@@ -11,7 +11,7 @@ load_dotenv()
 
 ''' Configuring AWS dynamo db '''
 dynamoDbResource = boto3.resource(os.getenv("AWS_DYNAMO"), region_name=os.getenv("AWS_REGION"))
-''' Configuring AWS Cognito db '''
+''' Configuring AWS Cognito '''
 cognitoClient = boto3.client(os.getenv("AWS_COGNITO"), region_name=os.getenv("AWS_REGION"))
 table_name = os.getenv("DYNAMO_USER_TABLE")
 
