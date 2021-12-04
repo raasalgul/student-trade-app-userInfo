@@ -1,1 +1,0 @@
-# student-trade-app-userInfo
