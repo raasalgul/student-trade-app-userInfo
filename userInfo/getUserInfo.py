@@ -22,16 +22,22 @@ table_name = os.getenv("DYNAMO_USER_TABLE")
 def getUser():
     response = None
     try:
-        ''' Connect with User Info Dynamodb table '''
-        table = dynamoDbResource.Table(table_name)
-        logging.info("getUser: Connected to table")
-        ''' The key field is used to query the table '''
-        key = {"email": request.json['email'],
-               "institution": request.json['institution']
-               }
-        ''' Get the entire items from the table '''
-        response = table.get_item(Key=key)
-        logging.info("getUser: Got response from table {}".format(response))
+        bearer =request.headers.get('Authorization')
+        bearer=bearer.replace("Bearer ","")
+        responseUserData = cognitoClient.get_user(AccessToken=bearer)
+        logging.info("Response user data {}".format(responseUserData))
+
+        if responseUserData['ResponseMetadata']['HTTPStatusCode'] == 200:
+            ''' Connect with User Info Dynamodb table '''
+            table = dynamoDbResource.Table(table_name)
+            logging.info("getUser: Connected to table")
+            ''' The key field is used to query the table '''
+            key = {"email": request.json['email'],
+                   "institution": request.json['institution']
+                   }
+            ''' Get the entire items from the table '''
+            response = table.get_item(Key=key)
+            logging.info("getUser: Got response from table {}".format(response))
     except ClientError as e:
         logging.error(e)
     return response
