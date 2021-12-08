@@ -1,6 +1,6 @@
 import boto3
 import logging
-from userInfo import app
+from userInfo import application
 from flask import request
 from botocore.exceptions import ClientError
 import os
@@ -19,13 +19,13 @@ table_name = os.getenv("DYNAMO_USER_TABLE")
  table, this method will update that record when user is updating their information with other data. '''
 
 
-@app.route('/update-user', methods=['POST'])
+@application.route('/update-user', methods=['POST'])
 def updateUser():
     response = None
     try:
         ''' Connect with User Info Dynamodb table '''
         table = dynamoDbResource.Table(table_name)
-        logging.log("updateUser: Connected to table")
+        logging.info("updateUser: Connected to table")
         ''' The key field is used to query the table '''
         key = {"email": request.json['email'],
                "institution": request.json['institution']
@@ -60,7 +60,7 @@ def updateUser():
                 try:
                     ''' Remove the last comma from the query string '''
                     updateString = updateString[:-1]
-                    logging.log('update String is {}'.format(updateString))
+                    logging.info('update String is {}'.format(updateString))
                     ''' Update the user info table '''
                     response=table.update_item(
                         Key=key,
@@ -68,7 +68,7 @@ def updateUser():
                         ExpressionAttributeValues=expressionAttribute,
                         ReturnValues="UPDATED_NEW"
                     )
-                    logging.log("Value updated in the table {}".format(response))
+                    logging.info("Value updated in the table {}".format(response))
                 except ClientError as e:
                     logging.error(e)
         except ClientError as e:
@@ -77,6 +77,6 @@ def updateUser():
         logging.error(e)
     return response
 
-@app.route('/health', methods=['get'])
+@application.route('/health', methods=['get'])
 def healthCheck():
     return {"message":"healthy"}
