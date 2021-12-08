@@ -53,7 +53,8 @@ def uploadProfilePicture():
             response=s3.meta.client.upload_fileobj(uploadedFile,bucket_name,s3_key,
                                                 ExtraArgs={"ACL": "public-read"})
             logging.info('Uploaded the picture to S3 {}'.format(response))
-            s3Url="https://{0}.s3.amazonaws.com/{1}".format(bucket_name, s3_key);
+            s3Url="https://{0}.s3.amazonaws.com/{1}".format(bucket_name, s3_key)
+            s3Url=s3Url.replace(" ","+").replace(":","%3A")
             print('Uploaded the picture to S3 {}'.format(s3Url))
             #s3Url="bello"
             table = dynamoDbResource.Table(table_name)
