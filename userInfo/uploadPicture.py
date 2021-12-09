@@ -47,7 +47,7 @@ def uploadProfilePicture():
             now = datetime.now()
             current_time = now.strftime("%H:%M:%S")
             logging.info('Uploaded file name is {}'.format(uploadedFile.filename))
-            s3_key='profile-picture/id-' + current_time + "-" + uploadedFile.filename
+            s3_key=userEmail + '/profile-picture-' + current_time + "-" + uploadedFile.filename
             '''We will be forming a folder like structure in S3 where profile-picture will be the folder and 
             the file name will start with Id (email Id) concatenate with current time followed by the uploaded file name'''
             response=s3.meta.client.upload_fileobj(uploadedFile,bucket_name,s3_key,
