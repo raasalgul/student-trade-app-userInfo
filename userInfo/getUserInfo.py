@@ -5,6 +5,7 @@ from flask import request
 from botocore.exceptions import ClientError
 import os
 from dotenv import load_dotenv
+import json
 
 ''' Loading Environment files '''
 load_dotenv()
@@ -41,3 +42,7 @@ def getUser():
     except ClientError as e:
         logging.error(e)
     return response
+
+@application.route("/", methods=['GET'])
+def healthCheck():
+    return json.dumps({'status': 'success'}), 200, {'ContentType': 'application/json'}
