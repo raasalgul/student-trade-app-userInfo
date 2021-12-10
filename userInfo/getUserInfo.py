@@ -43,6 +43,6 @@ def getUser():
         logging.error(e)
     return response
 
-@application.route("/", methods=['GET'])
+@application.route("/health", methods=['GET'])
 def healthCheck():
     return json.dumps({'status': 'success'}), 200, {'ContentType': 'application/json'}
