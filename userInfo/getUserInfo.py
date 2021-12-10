@@ -5,7 +5,6 @@ from flask import request
 from botocore.exceptions import ClientError
 import os
 from dotenv import load_dotenv
-import json
 
 ''' Loading Environment files '''
 load_dotenv()
@@ -23,8 +22,8 @@ table_name = os.getenv("DYNAMO_USER_TABLE")
 def getUser():
     response = None
     try:
-        bearer = request.headers.get('Authorization')
-        bearer = bearer.replace("Bearer ", "")
+        bearer =request.headers.get('Authorization')
+        bearer=bearer.replace("Bearer ","")
         responseUserData = cognitoClient.get_user(AccessToken=bearer)
         logging.info("Response user data {}".format(responseUserData))
 
@@ -42,18 +41,3 @@ def getUser():
     except ClientError as e:
         logging.error(e)
     return response
-
-
-@application.route("/health", methods=['GET'])
-def healthCheck():
-    return json.dumps({'status': 'healthy'}), 200, {'ContentType': 'application/json'}
-
-
-@application.route("/ELB-HealthChecker/2.0", methods=['GET'])
-def healthCheck():
-    return json.dumps({'status': 'success'}), 200, {'ContentType': 'application/json'}
-
-
-@application.route("/", methods=['GET'])
-def healthCheck():
-    return json.dumps({'status': 'success'}), 200, {'ContentType': 'application/json'}
