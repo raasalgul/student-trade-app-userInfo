@@ -49,6 +49,11 @@ def healthCheck():
     return json.dumps({'status': 'healthy'}), 200, {'ContentType': 'application/json'}
 
 
+@application.route("/ELB-HealthChecker/2.0", methods=['GET'])
+def healthCheck():
+    return json.dumps({'status': 'success'}), 200, {'ContentType': 'application/json'}
+
+
 @application.route("/", methods=['GET'])
 def healthCheck():
     return json.dumps({'status': 'success'}), 200, {'ContentType': 'application/json'}
