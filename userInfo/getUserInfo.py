@@ -23,8 +23,8 @@ table_name = os.getenv("DYNAMO_USER_TABLE")
 def getUser():
     response = None
     try:
-        bearer =request.headers.get('Authorization')
-        bearer=bearer.replace("Bearer ","")
+        bearer = request.headers.get('Authorization')
+        bearer = bearer.replace("Bearer ", "")
         responseUserData = cognitoClient.get_user(AccessToken=bearer)
         logging.info("Response user data {}".format(responseUserData))
 
@@ -43,6 +43,12 @@ def getUser():
         logging.error(e)
     return response
 
+
 @application.route("/health", methods=['GET'])
+def healthCheck():
+    return json.dumps({'status': 'healthy'}), 200, {'ContentType': 'application/json'}
+
+
+@application.route("/", methods=['GET'])
 def healthCheck():
     return json.dumps({'status': 'success'}), 200, {'ContentType': 'application/json'}
