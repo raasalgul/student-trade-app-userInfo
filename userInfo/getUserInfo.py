@@ -5,6 +5,8 @@ from flask import request
 from botocore.exceptions import ClientError
 import os
 from dotenv import load_dotenv
+from feedback import applicationScheduler
+import time
 
 ''' Loading Environment files '''
 load_dotenv()
@@ -41,3 +43,27 @@ def getUser():
     except ClientError as e:
         logging.error(e)
     return response
+
+@application.route('/get-feeds', methods=['GET'])
+def getFeeds():
+    try:
+        print("Inside feeds")
+        global feed
+        feed = applicationScheduler.DataFormation('us-east-1','feedsTable',[],True,10,
+                                         'student_trade_app_feed_queue','us-east-1','isTrue')
+        feed.initialization()
+        feed.schedulerStart(2)
+        # time.sleep(10)
+        # feed.schedulerStop()
+        return {"status":"success"}
+    except Exception as e:
+        print(e)
+
+@application.route('/stop-feeds', methods=['GET'])
+def getFeedsStop():
+    try:
+        print("Inside feeds")
+        feed.schedulerStop()
+        return {"status":"success"}
+    except Exception as e:
+        print(e)

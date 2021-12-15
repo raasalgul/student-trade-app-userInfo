@@ -1,7 +1,7 @@
 boto3==1.20.15
 botocore==1.23.15
 click==8.0.3
-dynamodb-feeds-to-sqs==0.0.1
+dynamodb-feeds-to-sqs==0.1.1
 Flask==2.0.2
 Flask-Cors==3.0.10
 itsdangerous==2.0.1
@@ -11,6 +11,7 @@ MarkupSafe==2.0.1
 python-dateutil==2.8.2
 python-dotenv==0.19.2
 s3transfer==0.5.0
+schedule==1.1.0
 six==1.16.0
 urllib3==1.26.7
 Werkzeug==2.0.2
